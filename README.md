@@ -1,4 +1,9 @@
 # CM-kNN
 Based on Learning k for kNN Classification
 
-## Dependencies
+## Getting Started
+make run
+
+### Dependencies
+
+Python 3.x
