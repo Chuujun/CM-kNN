@@ -12,6 +12,8 @@ from sklearn.preprocessing import MinMaxScaler
 from calulation import calculate_accuracy
 from sklearn.neighbors import KNeighborsClassifier as KNN
 
+from cm_knn import cm_knn
+
 def knn(X, Y, X_label, Y_label, n):
     knn = KNN(n_neighbors=n)
     knn.fit(X, X_label)
@@ -19,6 +21,32 @@ def knn(X, Y, X_label, Y_label, n):
     accuracy = calculate_accuracy(Y_label, predicted_labels)
     
     return accuracy
+
+def cv_knn(X, Y, X_label, Y_label):
+    knn = KNeighborsClassifier()
+    # 设置CV-KNN K参数范围
+    param_grid = {'n_neighbors': range(1, 11)}
+    # 进行10倍交叉验证
+    kf = KFold(n_splits=10, shuffle=True, random_state=40)  # 创建KFold对象
+    # 使用GridSearchCV进行参数搜索和交叉验证
+    grid_search = GridSearchCV(knn, param_grid, cv=kf)
+    # 拟合CV-KNN模型
+    grid_search.fit(X, X_label)
+    # 获取最佳k值
+    best_k = grid_search.best_params_['n_neighbors']
+    # 使用最佳k值创建CV-KNN模型
+    cv_knn = KNeighborsClassifier(n_neighbors=best_k)
+    cv_knn.fit(X, X_label)
+    predicted_labels = cv_knn.predict(Y)
+    accuracy = calculate_accuracy(Y_label, predicted_labels)
+
+    return accuracy
+
+def l_knn(X, Y, X_label, Y_label):
+    return cm_knn(X, Y, X_label, Y_label, 1, 0, 1, 1000)
+
+def ll_knn(X, Y, X_label, Y_label):
+    return cm_knn(X, Y, X_label, Y_label, 1, 1, 0, 1000)
 
 def compute_local_density(X, k):
     nbrs = NearestNeighbors(n_neighbors=k+1).fit(X)
@@ -41,26 +69,6 @@ def ad_knn(X, Y, X_label, Y_label):
     # 使用标记后的训练数据进行模型训练
     knn.fit(X, X_label)
     predicted_labels = knn.predict(Y)
-    accuracy = calculate_accuracy(Y_label, predicted_labels)
-
-    return accuracy
-
-def cv_knn(X, Y, X_label, Y_label):
-    knn = KNeighborsClassifier()
-    # 设置CV-KNN K参数范围
-    param_grid = {'n_neighbors': range(1, 11)}
-    # 进行10倍交叉验证
-    kf = KFold(n_splits=10, shuffle=True, random_state=40)  # 创建KFold对象
-    # 使用GridSearchCV进行参数搜索和交叉验证
-    grid_search = GridSearchCV(knn, param_grid, cv=kf)
-    # 拟合CV-KNN模型
-    grid_search.fit(X, X_label)
-    # 获取最佳k值
-    best_k = grid_search.best_params_['n_neighbors']
-    # 使用最佳k值创建CV-KNN模型
-    cv_knn = KNeighborsClassifier(n_neighbors=best_k)
-    cv_knn.fit(X, X_label)
-    predicted_labels = cv_knn.predict(Y)
     accuracy = calculate_accuracy(Y_label, predicted_labels)
 
     return accuracy
