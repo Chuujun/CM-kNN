@@ -7,14 +7,14 @@ from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier as KNN
 from collections import Counter
 
-dataset_path = 'prepared_dataset/climate.csv'
+dataset_path = 'prepared_dataset/german.csv'
 
 # Read the dataset file and convert it to a matrix
 df = pd.read_csv(dataset_path)
 data_matrix = df.values
 
 # Separating labels and features
-features = data_matrix[:, 2 :-1]  # 3-20 columns are features
+features = data_matrix[:, 0 :-1]  # 3-20 columns are features
 labels = data_matrix[:, -1]     # last column is label
 
 def calculate_loss(X, Y, L, rho1, rho2, rho3, W):
@@ -22,10 +22,13 @@ def calculate_loss(X, Y, L, rho1, rho2, rho3, W):
     R2W = np.sum(np.linalg.norm(W, axis=1))
     R3W = np.trace(W.T @ X @ L @ X.T @ W)
     loss = (np.linalg.norm(X.T @ W - Y, ord='fro')) ** 2 + rho1 * R1W + rho2 * R2W + rho3 * R3W
+    print("R1W: ",R1W)
+    print("R2W: ",R2W)
+    print("R3W: ",R3W)
 
     return loss
 
-def algorithm_1(X, Y, rho1, rho2, rho3, L, max_iter, tol=1e-5):
+def algorithm_1(X, Y, rho1, rho2, rho3, L, max_iter, tol=1e-4):
     """
     Implements Algorithm 1 to optimize the objective function.
 
@@ -113,6 +116,9 @@ kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
 CM_KNN_accurancy_list = []
 KNN_accurancy_list = []
 for i, (train_index, test_index) in enumerate(kf.split(features)):
+    # if i<7:
+    #     continue
+
     # Splitting the data into training and testing sets
     X, Y = features[train_index], features[test_index]
     Y_dm = np.transpose(Y)
@@ -121,11 +127,12 @@ for i, (train_index, test_index) in enumerate(kf.split(features)):
     # Normalization
     X_normalized = (X - X.mean()) / X.std()
     Y_normalized = (Y - Y.mean()) / Y.std()
-    Y_dm_normalized = (Y_dm - Y_dm.mean()) / Y_dm.std()
+    # Y_dm_normalized = (Y_dm - Y_dm.mean()) / Y_dm.std()
+    Y_dm_normalized = Y_normalized.T
 
     L = compute_laplacian(X)
 
-    W = algorithm_1(X_normalized, Y_dm_normalized, 12.0, 5.0, 1.0, L, 1000)
+    W = algorithm_1(X_normalized, Y_dm_normalized, 1.0, 1.0, 1.0, L, 1000)
     # Save the W matrix to the file
 
     # For each test data
@@ -138,7 +145,12 @@ for i, (train_index, test_index) in enumerate(kf.split(features)):
             if np.abs(W[i][j]) > threshold:
                 predicted_labels.append(X_label[i])
 
-        print("K: ",len(predicted_labels))
+        k = len(predicted_labels)
+        print("K: ",k)
+        if k == 0:
+            Y_label = np.delete(Y_label, j)
+            continue
+
         y_predicted = Counter(predicted_labels).most_common(1)[0][0]
         Y_predicted.append(y_predicted)
 
@@ -158,15 +170,14 @@ for i, (train_index, test_index) in enumerate(kf.split(features)):
     print("KNN_accuracy: ", KNN_accuracy)
     KNN_accurancy_list.append(KNN_accuracy)
 
-    if i>1:
+    if i>2:
         break
 
+CM_KNN_mean = np.mean(CM_KNN_accurancy_list)
+CM_KNN_std = np.std(CM_KNN_accurancy_list, ddof=1)
 
-# CM_KNN_mean = np.mean(CM_KNN_accurancy_list)
-# CM_KNN_std = np.std(CM_KNN_accurancy_list, ddof=1)
+KNN_mean = np.mean(KNN_accurancy_list)
+KNN_std = np.std(KNN_accurancy_list, ddof=1)
 
-# KNN_mean = np.mean(KNN_accurancy_list)
-# KNN_std = np.std(KNN_accurancy_list, ddof=1)
-
-# print("CM_KNN_total: ", CM_KNN_mean, "±", CM_KNN_std)
-# print("KNN_total: ", KNN_mean, "±", KNN_std)
+print("CM_KNN_total: ", CM_KNN_mean, "±", CM_KNN_std)
+print("KNN_total: ", KNN_mean, "±", KNN_std)

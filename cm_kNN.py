@@ -58,14 +58,13 @@ def algorithm_1(X, Y, rho1, rho2, rho3, max_iter, tol=1e-5):
         loss = calculate_loss(X, Y, L, rho1, rho2, rho3, W)
         loss_old = calculate_loss(X, Y, L, rho1, rho2, rho3, W_old)
         diff = np.abs(loss_old - loss)
-        print("loss diff: ", diff, " in round ", iteration)
+        # print("loss diff: ", diff, " in round ", iteration)
         if diff < tol:
             break
-        # print("W in ",iteration, W)
 
     return W
 
-def cm_knn(X, Y, X_label, Y_label, rho1, rho2, rho3, max_iter, tol=1e-5):
+def cm_knn(X, Y, X_label, Y_label, rho1, rho2, rho3, max_iter, tol=1e-4):
     W = algorithm_1(X, Y, rho1, rho2, rho3, max_iter)
 
     Y_predicted = []
@@ -76,8 +75,7 @@ def cm_knn(X, Y, X_label, Y_label, rho1, rho2, rho3, max_iter, tol=1e-5):
         for i in range(W.shape[0]):
             if np.abs(W[i][j]) > threshold:
                 predicted_labels.append(X_label[i])
-
-        print("K: ",len(predicted_labels))
+        # print("K: ",len(predicted_labels))
         y_predicted = Counter(predicted_labels).most_common(1)[0][0]
         Y_predicted.append(y_predicted)
 

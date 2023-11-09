@@ -6,8 +6,6 @@ dataset_paths = [
     'prepared_dataset/german.csv'
 ]
 
-dataset_path = 'prepared_dataset/climate.csv'
-
 def load_data(dataset_path):
     '''
     Load dataset from dataset_path and extract features and labels.
@@ -43,3 +41,19 @@ def normalize_data(X):
     
     return X_normalized
 
+def normalize_data_minmax(X, min_val=1, max_val=2):
+    '''
+    Normalize data matrix using Min-Max normalization.
+
+    Parameters:
+    - X : matrix
+    - min_val: minimum value for normalization (default: 0)
+    - max_val: maximum value for normalization (default: 1)
+
+    Return:
+    - normalized_X: normalized matrix
+    '''
+    X_normalized = (X - X.min()) / (X.max() - X.min())
+    normalized_X = X_normalized * (max_val - min_val) + min_val
+
+    return normalized_X
