@@ -20,7 +20,6 @@ def algorithm_1(X, Y, rho1, rho2, rho3, max_iter, tol=1e-5):
     - X: Train matrix (n * d) (n train points, d features)
     - Y: Test matrix (d * m) (m test points ,d_features)
     - rho1, rho2, rho3: Regularization parameters
-    - L: Graph Laplacian matrix
     - max_iter: Maximum number of iterations
     - tol: Tolerance for convergence
 
@@ -79,7 +78,6 @@ def cm_knn(X, Y, X_label, Y_label, rho1, rho2, rho3, max_iter, tol=1e-4):
         y_predicted = Counter(predicted_labels).most_common(1)[0][0]
         Y_predicted.append(y_predicted)
 
-    # CM_KNN test
     accuracy = calculate_accuracy(Y_label, Y_predicted)
 
     return accuracy

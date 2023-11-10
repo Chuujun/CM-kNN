@@ -32,7 +32,7 @@ def run_KFold(k, random, features, labels):
         Y_dm_normalized = Y_normalized.T
 
         # CM_KNN test
-        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 10, 5, 1, 1000)
+        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 15, 5, 1, 1000)
         print("CM_KNN_accuracy: ", CM_KNN_accuracy)
         CM_KNN_accuracy_list.append(CM_KNN_accuracy)
 
@@ -47,12 +47,12 @@ def run_KFold(k, random, features, labels):
         CV_KNN_accuracy_list.append(CV_KNN_accuracy)
 
         # L_KNN test
-        L_KNN_accuracy = l_knn(X_normalized, Y_normalized, X_label, Y_label)
+        L_KNN_accuracy = l_knn(X_normalized, Y_dm_normalized, X_label, Y_label)
         print("L_KNN_accuracy: ", L_KNN_accuracy)
         L_KNN_accuracy_list.append(L_KNN_accuracy)
 
         # LL_KNN test
-        LL_KNN_accuracy = ll_knn(X_normalized, Y_normalized, X_label, Y_label)
+        LL_KNN_accuracy = ll_knn(X_normalized, Y_dm_normalized, X_label, Y_label)
         print("LL_KNN_accuracy: ", LL_KNN_accuracy)
         LL_KNN_accuracy_list.append(LL_KNN_accuracy)
 
@@ -65,5 +65,8 @@ def run_KFold(k, random, features, labels):
         LMNN_accuracy = lmnn(X_normalized, Y_normalized, X_label, Y_label)
         print("LMNN_accuracy: ", LMNN_accuracy)
         LMNN_accuracy_list.append(LMNN_accuracy)
+
+        if (i > 0):
+            break
 
     return CM_KNN_accuracy_list, KNN_accuracy_list, CV_KNN_accuracy_list, L_KNN_accuracy_list, LL_KNN_accuracy_list, AD_KNN_accuracy_list, LMNN_accuracy_list

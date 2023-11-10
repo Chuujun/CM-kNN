@@ -8,7 +8,7 @@ from kfold_cross_validation import run_KFold
 features, labels = load_data('prepared_dataset/climate.csv')
 
 n_splits = 10  # Number of splits for cross-validation
-cm_knn_accuracy_list, knn_accuracy_list, cv_knn_accuracy_list, l_knn_accuracy_list, ll_knn_accuracy_list, ad_knn_accuracy_list, lmnn_accuracy_list = run_KFold(n_splits, 50, features, labels)
+cm_knn_accuracy_list, knn_accuracy_list, cv_knn_accuracy_list, l_knn_accuracy_list, ll_knn_accuracy_list, ad_knn_accuracy_list, lmnn_accuracy_list = run_KFold(n_splits, 40, features, labels)
 
 cm_knn_mean, cm_knn_std = calculate_totol_accurancy(cm_knn_accuracy_list)
 knn_mean, knn_std = calculate_totol_accurancy(knn_accuracy_list)
