@@ -1,11 +1,6 @@
 import numpy as np
 import pandas as pd
 
-dataset_paths = [
-    'prepared_dataset/climate.csv',
-    'prepared_dataset/german.csv'
-]
-
 def load_data(dataset_path):
     '''
     Load dataset from dataset_path and extract features and labels.
