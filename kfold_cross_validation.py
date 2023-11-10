@@ -66,4 +66,4 @@ def run_KFold(k, random, features, labels):
         print("LMNN_accuracy: ", LMNN_accuracy)
         LMNN_accuracy_list.append(LMNN_accuracy)
 
-    return CM_KNN_accuracy_list, KNN_accuracy_list, CV_KNN_accuracy_list, AD_KNN_accuracy_list, LMNN_accuracy_list
+    return CM_KNN_accuracy_list, KNN_accuracy_list, CV_KNN_accuracy_list, L_KNN_accuracy_list, LL_KNN_accuracy_list, AD_KNN_accuracy_list, LMNN_accuracy_list
