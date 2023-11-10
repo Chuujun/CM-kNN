@@ -32,7 +32,7 @@ def run_KFold(k, random, features, labels):
         Y_dm_normalized = Y_normalized.T
 
         # CM_KNN test
-        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 1000)
+        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 10, 5, 1, 1000)
         print("CM_KNN_accuracy: ", CM_KNN_accuracy)
         CM_KNN_accuracy_list.append(CM_KNN_accuracy)
 
