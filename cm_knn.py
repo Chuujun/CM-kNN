@@ -12,7 +12,7 @@ def calculate_loss(X, Y, L, rho1, rho2, rho3, W):
 
     return loss
 
-def algorithm_1(X, Y, rho1, rho2, rho3, max_iter, tol=1e-5):
+def algorithm_1(X, Y, rho1, rho2, rho3, max_iter, tol = 1e-5):
     """
     Implements Algorithm 1 to optimize the objective function.
 

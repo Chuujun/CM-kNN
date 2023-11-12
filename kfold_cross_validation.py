@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier as KNN
 
 from cm_knn import cm_knn
-from data_preprocess import normalize_data_minmax
+from data_preprocess import normalize_data, normalize_data_minmax
 from baseline import cv_knn, l_knn, ll_knn, ad_knn, knn, lmnn
 
 def run_KFold(k, random, features, labels):
@@ -27,12 +27,14 @@ def run_KFold(k, random, features, labels):
         X_label, Y_label = labels[train_index], labels[test_index]
 
         # Normalization
-        X_normalized = normalize_data_minmax(X)
-        Y_normalized = normalize_data_minmax(Y)
+        # X_normalized = normalize_data_minmax(X)
+        # Y_normalized = normalize_data_minmax(Y)
+        X_normalized = normalize_data(X)
+        Y_normalized = normalize_data(Y)
         Y_dm_normalized = Y_normalized.T
 
         # CM_KNN test
-        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 15, 5, 1, 1000)
+        CM_KNN_accuracy = cm_knn(X_normalized, Y_dm_normalized, X_label, Y_label, 1, 1, 1, 1000)
         print("CM_KNN_accuracy: ", CM_KNN_accuracy)
         CM_KNN_accuracy_list.append(CM_KNN_accuracy)
 
